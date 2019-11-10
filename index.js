@@ -1,24 +1,88 @@
+const events = {
+  MouseEvent: [
+    'altKey',
+    'button',
+    'buttons',
+    'clientX',
+    'clientY',
+    'ctrlKey',
+    'metaKey',
+    'movementX',
+    'movementY',
+    'offsetX',
+    'offsetY',
+    'pageX',
+    'pageY',
+    'region',
+    'relatedTarget',
+    'screenX',
+    'screenY',
+    'shiftKey',
+    'which',
+    // 'mozPressure', -> PointerEvent.pressure
+    'mozInputSource',
+    'webkitForce',
+    'x',
+    'y'
+  ],
+  TouchEvent: [
+    'altKey',
+    'changedTouches',
+    'ctrlKey',
+    'metaKey',
+    'shiftKey',
+    'targetTouches',
+    'touches',
+    'rotation',
+    'scale'
+  ],
+  PointerEvent: [
+    'pointerId',
+    'width',
+    'height',
+    'pressure',
+    'tangentialPressure',
+    'tiltX',
+    'tiltY',
+    'twist',
+    'pointerType',
+    'isPrimary'
+  ]
+};
+
 window.addEventListener('load', () => {
-  /* Note that `document.body` doesn't span the whole viewport by default but `document` does */
+  for (const event in events) {
+    const eventDetails = document.createElement('details');
+    eventDetails.open = true;
+    const eventSummary = document.createElement('summary');
+    eventDetails.append(eventSummary);
+    const eventA = document.createElement('a');
+    eventA.textContent = event;
+    eventA.href = 'https://developer.mozilla.org/en-US/docs/Web/API/' + event;
+    eventSummary.append(eventA);
+    const eventTable = document.createElement('table');
+    const props = events[event];
+    for (const prop of props) {
+      const propTr = document.createElement('tr');
+      const nameTh = document.createElement('th');
+      nameTh.textContent = prop;
+      propTr.append(nameTh);
+      const valueTd = document.createElement('td');
+      valueTd.id = event + '.' + prop;
+      propTr.append(valueTd);
+      eventTable.append(propTr);
+    }
 
-  document.addEventListener('mousemove', event => {
-    document.getElementById('mouseDiv').textContent = `mouse: ${event.clientX} (${event.movementX}) ✕ ${event.clientY} (${event.movementY}) - ${event.buttons}`;
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-  });
+    eventDetails.append(eventTable);
+    document.body.append(eventDetails);
 
-  document.addEventListener('pointermove', event => {
-    document.getElementById('pointerDiv').textContent = `pointer: ${event.clientX} (${event.movementX}) ✕ ${event.clientY} (${event.movementY}) - ${event.buttons}`;
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-  });
-
-  document.addEventListener('touchmove', event => {
-    document.getElementById('touchDiv').textContent = 'touch: ' + [...event.touches].map(t => `${t.clientX.toFixed(0)} (${t.radiusX.toFixed(0)}) ✕ ${t.clientY.toFixed(0)} (${t.radiusY.toFixed(0)})`).join(', ');
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-  }, { passive: false });
+    for (const variant of ['down', 'move', 'up']) {
+      window.addEventListener(event.slice(0, -'event'.length).toLowerCase() + variant, e => {
+        for (const prop of props) {
+          const value = e[prop];
+          document.getElementById(event + '.' + prop).textContent = value;
+        }
+      }, { passive: true });
+    }
+  }
 });
