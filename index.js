@@ -69,17 +69,51 @@ const variants = {
   pointer: ['down', 'move', 'up']
 }
 
+const attachedEvents = [];
+function resetEvents() {
+  for (const attachedEvent of attachedEvents) {
+    window.removeEventListener(attachedEvent.event, attachedEvent.listener);
+  }
+
+  attachedEvents.splice(0, attachedEvents.length);
+
+  for (const event in events) {
+    if (!document.getElementById(event + 'Input').checked) {
+      continue;
+    }
+
+    const props = events[event];
+    for (const variant of variants[event]) {
+      const listener = e => {
+        for (const prop in props) {
+          const value = props[prop](e);
+          document.getElementById(event + '.' + prop).innerHTML = value;
+        }
+      };
+
+      window.addEventListener(event + variant, listener, { passive: true });
+      attachedEvents.push({ event: event + variant, listener });
+    }
+  }
+}
+
 window.addEventListener('load', () => {
   for (const event in events) {
     const eventDetails = document.createElement('details');
     eventDetails.open = true;
     const eventSummary = document.createElement('summary');
-    eventDetails.append(eventSummary);
+    const eventInput = document.createElement('input');
+    eventInput.type = 'checkbox';
+    eventInput.checked = true;
+    eventInput.id = event + 'Input';
+    eventInput.addEventListener('change', resetEvents);
+    eventSummary.append(eventInput);
     const eventA = document.createElement('a');
     eventA.textContent = event;
     eventA.href = `https://developer.mozilla.org/en-US/docs/Web/API/${event}Event`;
     eventA.target = 'blank';
     eventSummary.append(eventA);
+    eventDetails.append(eventSummary);
     const eventTable = document.createElement('table');
     const props = events[event];
     for (const prop in props) {
@@ -99,15 +133,7 @@ window.addEventListener('load', () => {
 
     eventDetails.append(eventTable);
     document.body.append(eventDetails);
-
-
-    for (const variant of variants[event]) {
-      window.addEventListener(event + variant, e => {
-        for (const prop in props) {
-          const value = props[prop](e);
-          document.getElementById(event + '.' + prop).innerHTML = value;
-        }
-      }, { passive: true });
-    }
   }
+
+  resetEvents();
 });
