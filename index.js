@@ -174,4 +174,8 @@ window.addEventListener('load', () => {
   document.getElementById('preventDefaultInput').addEventListener('change', resetEvents);
   document.getElementById('returnFalseInput').addEventListener('change', resetEvents);
   document.getElementById('passiveInput').addEventListener('change', resetEvents);
+
+  document.getElementById('testDiv').addEventListener('touchmove', e => {
+    document.getElementById('testDiv').innerHTML = renderTouchList(e.touches);
+  }, { passive: false });
 });
