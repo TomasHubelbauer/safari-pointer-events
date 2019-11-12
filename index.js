@@ -177,5 +177,8 @@ window.addEventListener('load', () => {
 
   document.getElementById('testDiv').addEventListener('touchmove', e => {
     document.getElementById('testDiv').innerHTML = renderTouchList(e.touches);
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
   }, { passive: false });
 });
