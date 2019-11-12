@@ -56,6 +56,7 @@ function renderTouchList(touches) {
     result += `screen: ${t.screenX}, ${t.screenY} |`;
     result += `client: ${t.clientX}, ${t.clientY} |`;
     result += `page: ${t.pageX}, ${t.pageY} |`;
+    result += `radius: ${t.radiusX}, ${t.radiusY} |`;
     result += `target: ${t.target ? 'some' : 'none'}`;
     result += '<br />';
   }
