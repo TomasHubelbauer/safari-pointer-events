@@ -84,17 +84,35 @@ function resetEvents() {
 
     const props = events[event];
     for (const variant of variants[event]) {
+      if (!document.getElementById(event + '.' + variant + 'Input').checked) {
+        continue;
+      }
+
       const listener = e => {
         for (const prop in props) {
           const value = props[prop](e);
           document.getElementById(event + '.' + prop).innerHTML = value;
         }
+
+        if (document.getElementById('preventDefaultInput').checked) {
+          e.preventDefault();
+        }
+
+        if (document.getElementById('stopPropagationInput').checked) {
+          e.stopPropagation();
+        }
+
+        if (document.getElementById('returnFalseInput').checked) {
+          return false;
+        }
       };
 
-      window.addEventListener(event + variant, listener, { passive: true });
+      window.addEventListener(event + variant, listener, { passive: document.getElementById('passiveInput').checked });
       attachedEvents.push({ event: event + variant, listener });
     }
   }
+
+  document.getElementById('listenersDiv').textContent = `Currently listening: ${attachedEvents.map(ae => ae.event).join(', ')}`;
 }
 
 window.addEventListener('load', () => {
@@ -114,6 +132,21 @@ window.addEventListener('load', () => {
     eventA.target = 'blank';
     eventSummary.append(eventA);
     eventDetails.append(eventSummary);
+    for (const variant of variants[event]) {
+      const variantDiv = document.createElement('div');
+      const variantInput = document.createElement('input');
+      variantInput.type = 'checkbox';
+      variantInput.checked = true;
+      variantInput.id = event + '.' + variant + 'Input';
+      variantInput.addEventListener('change', resetEvents);
+      variantDiv.append(variantInput);
+      const variantLabel = document.createElement('label');
+      variantLabel.textContent = variant;
+      variantLabel.htmlFor = variantInput.id;
+      variantDiv.append(variantLabel);
+      eventDetails.append(variantDiv);
+    }
+
     const eventTable = document.createElement('table');
     const props = events[event];
     for (const prop in props) {
@@ -136,4 +169,8 @@ window.addEventListener('load', () => {
   }
 
   resetEvents();
+  document.getElementById('preventDefaultInput').addEventListener('change', resetEvents);
+  document.getElementById('stopPropagationInput').addEventListener('change', resetEvents);
+  document.getElementById('returnFalseInput').addEventListener('change', resetEvents);
+  document.getElementById('passiveInput').addEventListener('change', resetEvents);
 });

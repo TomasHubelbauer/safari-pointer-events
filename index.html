@@ -7,5 +7,23 @@
     <script src="index.js"></script>
     <link rel="stylesheet" href="index.css" />
   </head>
-  <body></body>
+  <body>
+    <div>
+      <input type="checkbox" checked id="preventDefaultInput" />
+      <label for="preventDefaultInput">Prevent default</label>
+    </div>
+    <div>
+      <input type="checkbox" checked id="stopPropagationInput" />
+      <label for="stopPropagationInput">Stop propagation</label>
+    </div>
+    <div>
+      <input type="checkbox" checked id="returnFalseInput" />
+      <label for="returnFalseInput">Return false</label>
+    </div>
+    <div>
+      <input type="checkbox" checked id="passiveInput" />
+      <label for="passiveInput">Passive</label>
+    </div>
+    <div id="listenersDiv"></div>
+  </body>
 </html>
