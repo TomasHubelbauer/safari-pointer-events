@@ -94,12 +94,12 @@ function resetEvents() {
           document.getElementById(event + '.' + prop).innerHTML = value;
         }
 
-        if (document.getElementById('preventDefaultInput').checked) {
-          e.preventDefault();
-        }
-
         if (document.getElementById('stopPropagationInput').checked) {
           e.stopPropagation();
+        }
+
+        if (document.getElementById('preventDefaultInput').checked) {
+          e.preventDefault();
         }
 
         if (document.getElementById('returnFalseInput').checked) {
@@ -169,8 +169,8 @@ window.addEventListener('load', () => {
   }
 
   resetEvents();
-  document.getElementById('preventDefaultInput').addEventListener('change', resetEvents);
   document.getElementById('stopPropagationInput').addEventListener('change', resetEvents);
+  document.getElementById('preventDefaultInput').addEventListener('change', resetEvents);
   document.getElementById('returnFalseInput').addEventListener('change', resetEvents);
   document.getElementById('passiveInput').addEventListener('change', resetEvents);
 });
