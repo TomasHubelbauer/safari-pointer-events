@@ -64,9 +64,9 @@ function renderTouchList(touches) {
 }
 
 const variants = {
-  mouse: ['down', 'move', 'up', 'enter', 'leave'],
-  touch: ['down', 'move', 'up'],
-  pointer: ['down', 'move', 'up']
+  mouse: ['down', 'move', 'up', 'enter', 'leave', 'over', 'out', 'click', 'dblclick'],
+  touch: ['start', 'move', 'end', 'cancel'],
+  pointer: ['down', 'move', 'up', 'enter', 'leave', 'over', 'out', 'cancel', 'capture']
 }
 
 const attachedEvents = [];
