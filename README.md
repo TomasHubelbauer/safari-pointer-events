@@ -7,4 +7,4 @@ on the mouse, touch and pointer events issued by browsers.
 
 ## To-Do
 
-Figure out why the touch events are not firing in Safari.
+### Figure out why the touch events are not firing in Safari
